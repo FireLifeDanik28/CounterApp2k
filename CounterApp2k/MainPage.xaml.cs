@@ -2,7 +2,8 @@
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
+
+        bool isTimer = false;
 
         public MainPage()
         {
@@ -11,14 +12,28 @@
 
         private void OnCounterClicked(object? sender, EventArgs e)
         {
-            count++;
+            //count++;
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
+            //if (count == 1)
+            //    CounterBtn.Text = $"Clicked {count} time";
+            //else
+            //    CounterBtn.Text = $"Clicked {count} times";
+
+            //SemanticScreenReader.Announce(CounterBtn.Text);
+        }
+
+        private void AddCounterClicked(object sender, EventArgs e)
+        {
+            //add counter
+        }
+
+        private void IsTimerChecked(object sender, CheckedChangedEventArgs e)
+        {
+            if (isTimer == false)
+                isTimer = true;
             else
-                CounterBtn.Text = $"Clicked {count} times";
+                isTimer = false;
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
         }
     }
 }
