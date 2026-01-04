@@ -178,31 +178,51 @@
                     HeightRequest = 40
                 };
 
+                ImageButton unoReverseButton = new ImageButton
+                {
+                    Source = "uno_reverse.jpg", //image file
+                    BackgroundColor = Colors.Transparent,
+                    WidthRequest = 40,
+                    HeightRequest = 40
+                };
+
                 timerButtons.Children.Add(startPauseButton);
                 timerButtons.Children.Add(resetButton);
+                timerButtons.Children.Add(unoReverseButton);
                 topRow.Children.Add(timerButtons);
 
                 System.Timers.Timer timer = new System.Timers.Timer(1000);
                 TimeSpan elapsedTime = TimeSpan.Zero;
                 bool isRunning = false;
+                bool isReversed = false;
+                Random chanceRandom = new Random();
+                bool useTransImage = false;
+
+                if (chanceRandom.Next(1, 101) <= 2) //2 in 100
+                {
+                    unoReverseButton.Source = "trans_uno_reverse.jpg";
+                    useTransImage = true;
+                }
+
+
 
                 startPauseButton.Clicked += (s, e) =>
+            {
+                if (!isRunning)
                 {
-                    if (!isRunning)
-                    {
-                        //start the timer
-                        timer.Start();
-                        startPauseButton.Text = "Pause";
-                        isRunning = true;
-                    }
-                    else
-                    {
-                        //pause the timer
-                        timer.Stop();
-                        startPauseButton.Text = "Resume";
-                        isRunning = false;
-                    }
-                };
+                    //start the timer
+                    timer.Start();
+                    startPauseButton.Text = "Pause";
+                    isRunning = true;
+                }
+                else
+                {
+                    //pause the timer
+                    timer.Stop();
+                    startPauseButton.Text = "Resume";
+                    isRunning = false;
+                }
+            };
 
                 resetButton.Clicked += (s, e) =>
                 {
@@ -213,9 +233,40 @@
                     isRunning = false; //set not running
                 };
 
+                unoReverseButton.Clicked += (s, e) =>
+                {
+                    if (useTransImage)
+                    {
+                        if (chanceRandom.Next(1, 101) <= 52) //52% chance
+                        {
+                            countersLayout.Children.Remove(counterContent);
+                        }
+                        else
+                        {
+                            isReversed = !isReversed;
+                        }
+                    }
+                    else
+                        isReversed = !isReversed;
+                };
+
                 timer.Elapsed += (s, e) =>
                 {
-                    elapsedTime = elapsedTime.Add(TimeSpan.FromSeconds(1)); //add 1 second
+                    if (isReversed)
+                    {
+                        if (elapsedTime.TotalSeconds > 0)
+                        {
+                            elapsedTime = elapsedTime.Subtract(TimeSpan.FromSeconds(1)); //add 1 second
+                        }
+                        else
+                        {
+                            elapsedTime = TimeSpan.Zero;
+                        }
+                    }
+                    else
+                    {
+                        elapsedTime = elapsedTime.Add(TimeSpan.FromSeconds(1));
+                    }
 
                     //update display on main thread
                     MainThread.BeginInvokeOnMainThread(() =>
@@ -223,7 +274,6 @@
                         displayLabel.Text = elapsedTime.ToString(@"hh\:mm\:ss");
                     });
                 };
-
             }
             deleteButton.Clicked += (s, e) =>
             {
