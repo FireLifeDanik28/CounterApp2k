@@ -146,9 +146,9 @@
                 {
                     if (int.TryParse(customEntry.Text, out int customValue))
                     {
-                        currentValue = customValue; // Set to custom value
-                        displayLabel.Text = currentValue.ToString(); // Update display
-                        customEntry.Text = ""; // Clear entry field
+                        currentValue = customValue; //set to custom value
+                        displayLabel.Text = currentValue.ToString(); //update display
+                        customEntry.Text = ""; //clear entry field
                     }
                 };
             }
@@ -187,14 +187,14 @@
                 {
                     if (!isRunning)
                     {
-                        // Start the timer
+                        //start the timer
                         timer.Start();
                         startPauseButton.Text = "Pause";
                         isRunning = true;
                     }
                     else
                     {
-                        // Pause the timer
+                        //pause the timer
                         timer.Stop();
                         startPauseButton.Text = "Resume";
                         isRunning = false;
@@ -203,18 +203,18 @@
 
                 resetButton.Clicked += (s, e) =>
                 {
-                    timer.Stop(); // Stop timer
-                    elapsedTime = TimeSpan.Zero; // Reset time
-                    displayLabel.Text = "00:00:00"; // Reset display
-                    startPauseButton.Text = "Start"; // Reset button text
-                    isRunning = false; // Set not running
+                    timer.Stop(); //stop timer
+                    elapsedTime = TimeSpan.Zero; //reset time
+                    displayLabel.Text = "00:00:00"; //reset display
+                    startPauseButton.Text = "Start"; //reset button text
+                    isRunning = false; //set not running
                 };
 
                 timer.Elapsed += (s, e) =>
                 {
-                    elapsedTime = elapsedTime.Add(TimeSpan.FromSeconds(1)); // Add 1 second
+                    elapsedTime = elapsedTime.Add(TimeSpan.FromSeconds(1)); //add 1 second
 
-                    // Update display on main thread
+                    //update display on main thread
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         displayLabel.Text = elapsedTime.ToString(@"hh\:mm\:ss");
@@ -225,10 +225,12 @@
             deleteButton.Clicked += (s, e) =>
             {
                 countersLayout.Children.Remove(counterContent);
-                //
             };
             countersLayout.Children.Add(counterContent);
             topRow.Children.Add(deleteButton);
         }
+
+
+
     }
 }
