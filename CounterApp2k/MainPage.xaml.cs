@@ -154,6 +154,72 @@
             }
             else
             {
+                displayLabel.Text = "00:00:00";
+                displayLabel.FontSize = 24;
+                HorizontalStackLayout timerButtons = new HorizontalStackLayout { Spacing = 10 };
+                Button startPauseButton = new Button
+                {
+                    Text = "Start",
+                    BackgroundColor = randomColor,
+                    TextColor = Colors.White,
+                    WidthRequest = 70,
+                    HeightRequest = 40
+                };
+
+                Button resetButton = new Button
+                {
+                    Text = "Reset",
+                    BackgroundColor = randomColor,
+                    TextColor = Colors.White,
+                    WidthRequest = 70,
+                    HeightRequest = 40
+                };
+
+                timerButtons.Children.Add(startPauseButton);
+                timerButtons.Children.Add(resetButton);
+                topRow.Children.Add(timerButtons);
+
+                System.Timers.Timer timer = new System.Timers.Timer(1000);
+                TimeSpan elapsedTime = TimeSpan.Zero;
+                bool isRunning = false;
+
+                startPauseButton.Clicked += (s, e) =>
+                {
+                    if (!isRunning)
+                    {
+                        // Start the timer
+                        timer.Start();
+                        startPauseButton.Text = "Pause";
+                        isRunning = true;
+                    }
+                    else
+                    {
+                        // Pause the timer
+                        timer.Stop();
+                        startPauseButton.Text = "Resume";
+                        isRunning = false;
+                    }
+                };
+
+                resetButton.Clicked += (s, e) =>
+                {
+                    timer.Stop(); // Stop timer
+                    elapsedTime = TimeSpan.Zero; // Reset time
+                    displayLabel.Text = "00:00:00"; // Reset display
+                    startPauseButton.Text = "Start"; // Reset button text
+                    isRunning = false; // Set not running
+                };
+
+                timer.Elapsed += (s, e) =>
+                {
+                    elapsedTime = elapsedTime.Add(TimeSpan.FromSeconds(1)); // Add 1 second
+
+                    // Update display on main thread
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        displayLabel.Text = elapsedTime.ToString(@"hh\:mm\:ss");
+                    });
+                };
 
             }
             deleteButton.Clicked += (s, e) =>
