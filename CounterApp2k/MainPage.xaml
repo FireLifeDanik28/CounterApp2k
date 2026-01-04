@@ -12,13 +12,15 @@
                 HeightRequest="185"
                 Aspect="AspectFit"
                 SemanticProperties.Description="dot net bot in a hovercraft number nine"
-                IsVisible="False"/>
+                IsVisible="False"
+                x:Name="Osama"/>
 
             <Label
                 Text="Hello, America!"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1" 
-                IsVisible="False"/>
+                IsVisible="False"
+                x:Name="America"/>
 
             <Label
                 Text="Click on add counter to add counter"
