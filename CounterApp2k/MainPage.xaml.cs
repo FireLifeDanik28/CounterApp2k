@@ -113,12 +113,14 @@
                 {
                     currentValue--;
                     displayLabel.Text = currentValue.ToString();
+                    CheckEasterEgg();
                 };
 
                 plusButton.Clicked += (s, e) =>
                 {
                     currentValue++;
                     displayLabel.Text = currentValue.ToString();
+                    CheckEasterEgg();
                 };
 
                 Entry customEntry = new Entry
@@ -149,6 +151,7 @@
                         currentValue = customValue; //set to custom value
                         displayLabel.Text = currentValue.ToString(); //update display
                         customEntry.Text = ""; //clear entry field
+                        CheckEasterEgg();
                     }
                 };
             }
@@ -225,12 +228,52 @@
             deleteButton.Clicked += (s, e) =>
             {
                 countersLayout.Children.Remove(counterContent);
+                CheckEasterEgg();
             };
             countersLayout.Children.Add(counterContent);
             topRow.Children.Add(deleteButton);
+            CheckEasterEgg();
         }
 
-
+        private void CheckEasterEgg()
+        {
+            var counters = countersLayout.Children.OfType<VerticalStackLayout>().ToList();
+            if (counters.Count == 3)
+            {
+                bool hasNine = false, hasEleven = false, hasTwoThousandOne = false;
+                foreach (var counter in counters)
+                {
+                    if (counter.Children.Count > 0 && counter.Children[0] is HorizontalStackLayout topRow)
+                    {
+                        // topRow children: [0]nameEntry, [1]displayLabel, [2+]buttons, [last]deleteButton
+                        if (topRow.Children.Count > 1 && topRow.Children[1] is Label displayLabel)
+                        {
+                            if (int.TryParse(displayLabel.Text, out int value))
+                            {
+                                if (value == 9) hasNine = true;
+                                if (value == 11) hasEleven = true;
+                                if (value == 2001) hasTwoThousandOne = true;
+                            }
+                        }
+                    }
+                }
+                if (hasNine && hasEleven && hasTwoThousandOne)
+                {
+                    Osama.IsVisible = true;
+                    America.IsVisible = true;
+                }
+                else
+                {
+                    Osama.IsVisible = false;
+                    America.IsVisible = false;
+                }
+            }
+            else
+            {
+                Osama.IsVisible = false;
+                America.IsVisible = false;
+            }
+        }
 
     }
 }
